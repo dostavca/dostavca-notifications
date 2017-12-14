@@ -1,0 +1,36 @@
+sudo: required
+
+services:
+  - docker
+
+language: java
+dist: trusty
+
+jdk:
+- openjdk8
+
+cache:
+  directories:
+  - "$HOME/.m2"
+
+env:
+  - CLOUDSDK_CORE_DISABLE_PROMPTS=1
+
+before_install:
+  - gcloud version
+  - gcloud components update kubectl || true
+  - curl https://sdk.cloud.google.com | bash
+  - bash -l ./gcloud.sh version
+  - bash -l ./gcloud.sh components update kubectl
+  - gcloud container clusters get-credentials dostavca --zone europe-west1-b --project dostavca-186109
+
+install: true
+
+script:
+  - mvn clean package -U
+  - docker build -t zanozbot/dostavca-notifications:latest .
+
+after_success:
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - docker push zanozbot/dostavca-notifications:latest
+  - kubectl apply -f notifications-deployment.yaml
