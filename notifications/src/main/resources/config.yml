@@ -7,9 +7,17 @@ kumuluzee:
     base-url: localhost:8080
     http:
       port: 8080
+  config:
+     start-retry-delay-ms: 500
+     max-retry-delay-ms: 900000
+     etcd:
+       hosts: http://localhost:2379
   discovery:
     cluster: dostavca
     etcd:
-      hosts: http://35.195.125.144:2379
+      hosts: http://localhost:2379
     ttl: 20
     ping-interval: 15
+
+maintenance:
+  value: false

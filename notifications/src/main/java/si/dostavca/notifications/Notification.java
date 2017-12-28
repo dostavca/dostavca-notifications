@@ -1,20 +1,20 @@
 package si.dostavca.notifications;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 public class Notification implements Serializable {
 
     private String message;
-    private int uid;
-    private boolean received;
+    private String uid;
 
     public Notification() {
+        generateUid();
     }
 
-    public Notification(String message, int uid, boolean received) {
+    public Notification(String message) {
         this.message = message;
-        this.uid = uid;
-        this.received = received;
+        generateUid();
     }
 
     public String getMessage() {
@@ -25,19 +25,12 @@ public class Notification implements Serializable {
         this.message = message;
     }
 
-    public int getUid() {
+    public String getUid() {
         return uid;
     }
 
-    public void setUid(int uid) {
-        this.uid = uid;
+    private void generateUid() {
+        this.uid = UUID.randomUUID().toString();
     }
 
-    public boolean isReceived() {
-        return received;
-    }
-
-    public void setReceived(boolean received) {
-        this.received = received;
-    }
 }
